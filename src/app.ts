@@ -28,39 +28,32 @@
 // });
 import express from "express";
 import cors from "cors";
-import routes from "./routes";
+import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import path from "path";
 
+// Load environment variables from .env file
 dotenv.config();
 
 const app = express();
-const port = parseInt(process.env.PORT || "10000", 10);
 
-app.use(
-	cors({
-		origin: process.env.FRONTEND_URL || "https://contestfront.onrender.com",
-		credentials: true,
-		optionsSuccessStatus: 200,
-	})
-);
+// CORS configuration
+const corsOptions = {
+	origin: process.env.FRONTEND_URL, // Allow requests from this origin
+	optionsSuccessStatus: 200,
+};
 
-app.options("*", cors());
-app.use(express.json());
+app.use(cors(corsOptions));
+app.use(bodyParser.json());
 
-// Serve static files from build folder
-app.use(express.static(path.join(__dirname, "../build")));
-
-// API routes
-app.use("/api", routes);
-
-// Catch-all route for SPA
-app.get("*", (req, res) => {
-	const filePath = path.join(__dirname, "../build/index.html");
-	console.log(`Serving: ${filePath}`); // Debug log
-	res.sendFile(filePath);
+// Your routes go here
+app.get("/api/registration/registrations", (req, res) => {
+	res.send("Registrations data");
 });
 
-app.listen(port, "0.0.0.0", () => {
-	console.log(`Server is running on port ${port}`);
+// Start the server
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => {
+	console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+export default app;
