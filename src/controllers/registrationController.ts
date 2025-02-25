@@ -119,5 +119,8 @@ export const updateRegistration = async (req: Request, res: Response) => {
 		res
 			.status(200)
 			.json({ message: "User updated successfully", user: updatedUser });
-	} catch (error) {}
+	} catch (error) {
+		console.error("Error updating registration:", error);
+		res.status(500).json({ message: "Error updating user", error });
+	}
 };
