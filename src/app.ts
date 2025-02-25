@@ -26,10 +26,12 @@
 // app.listen(port, () => {
 // 	console.log(`Server is running on port ${port}`);
 // });
+
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
+import routes from "./routes";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -38,17 +40,16 @@ const app = express();
 
 // CORS configuration
 const corsOptions = {
-	origin: process.env.FRONTEND_URL, // Allow requests from this origin
+	origin: process.env.FRONTEND_URL || "http://localhost:5173", // Allow requests from this origin
 	optionsSuccessStatus: 200,
+	credentials: true,
 };
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 // Your routes go here
-app.get("/api/registration/registrations", (req, res) => {
-	res.send("Registrations data");
-});
+app.use("/api", routes);
 
 // Start the server
 const PORT = process.env.PORT || 10000;
